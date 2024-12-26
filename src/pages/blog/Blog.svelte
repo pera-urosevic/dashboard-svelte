@@ -30,7 +30,7 @@
   const onCreate = async () => {
     const url = prompt('URL')
     if (!url) return
-    const id = apiPostCreate(url)
+    const id = await apiPostCreate(url)
     if (!id) return
     window.location.href = `#page=blog&postID=${id}`
   }
