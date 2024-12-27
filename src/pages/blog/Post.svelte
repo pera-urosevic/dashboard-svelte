@@ -69,8 +69,8 @@
           <input disabled id="image" title="Image" type="text" bind:value={post.image} />
           <label for="category">Category</label>
           <select id="category" title="Category" bind:value={post.category}>
-            {#each Object.entries(Category) as [key, value]}
-              <option value={key}>{value}</option>
+            {#each Object.values(Category) as value}
+              <option {value}>{value}</option>
             {/each}
           </select>
           <label for="template">Template</label>
