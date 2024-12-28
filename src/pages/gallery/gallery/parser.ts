@@ -1,5 +1,5 @@
-import { isValid } from '@pages/gallery/lint'
-import type { PhotoRecord, PhotoObject } from '@pages/gallery/types'
+import { isValid } from '@pages/gallery/photo/lint'
+import type { PhotoRecord, PhotoObject } from '@pages/gallery/shared/types'
 
 export const parseRecords = (records: PhotoRecord[], show: string): PhotoObject[] => {
   if (!records) return []

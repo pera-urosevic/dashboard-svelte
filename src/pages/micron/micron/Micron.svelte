@@ -1,9 +1,8 @@
 <script lang="ts">
   import Header from '@components/Header.svelte'
   import Main from '@components/Main.svelte'
-  import Page from '@components/Page.svelte'
-  import { apiStatus, apiPause, apiResume, apiConfig, apiConfigUpdate } from '@pages/micron/api'
-  import type { Task, Config } from '@pages/micron/types'
+  import { apiStatus, apiPause, apiResume, apiConfig, apiConfigUpdate } from '@pages/micron/shared/api'
+  import type { Task, Config } from '@pages/micron/shared/types'
   import { onMount } from 'svelte'
 
   let enabled = $state<boolean | undefined>()
@@ -117,40 +116,38 @@
   }
 </script>
 
-<Page title="Micron" favicon="micron">
-  <Header>
-    <a href="#page=micron">Micron</a>
-    {#if enabled !== undefined}
-      <button onclick={onToggleMicron}>{enabled ? 'Enabled' : 'Disabled'}</button>
-    {/if}
-  </Header>
-  <Main>
-    {#if config}
-      <div class="grid">
-        <div class="list">
-          {#each Object.entries(config) as [group, tasks]}
-            <div class="group">
-              <div class="title">{group}</div>
-              {#each tasks as task}
-                <div class="task">
-                  <button onclick={() => onEdit(group as keyof Config, task)}>{task.name}</button>
-                  <button onclick={() => onRemove(group as keyof Config, task)}>🗑️</button>
-                </div>
-              {/each}
-              <button onclick={() => onAdd(group)}>➕</button>
-            </div>
-          {/each}
-        </div>
-        <div class="editor">
-          {#if taskEditing}
-            <textarea spellcheck="false" value={taskEditing} oninput={onTask}></textarea>
-            <button disabled={!changed} onclick={onSave}>Save</button>
-          {/if}
-        </div>
+<Header>
+  <a href="/micron.html">Micron</a>
+  {#if enabled !== undefined}
+    <button onclick={onToggleMicron}>{enabled ? 'Enabled' : 'Disabled'}</button>
+  {/if}
+</Header>
+<Main>
+  {#if config}
+    <div class="grid">
+      <div class="list">
+        {#each Object.entries(config) as [group, tasks]}
+          <div class="group">
+            <div class="title">{group}</div>
+            {#each tasks as task}
+              <div class="task">
+                <button onclick={() => onEdit(group as keyof Config, task)}>{task.name}</button>
+                <button onclick={() => onRemove(group as keyof Config, task)}>🗑️</button>
+              </div>
+            {/each}
+            <button onclick={() => onAdd(group)}>➕</button>
+          </div>
+        {/each}
       </div>
-    {/if}
-  </Main>
-</Page>
+      <div class="editor">
+        {#if taskEditing}
+          <textarea spellcheck="false" value={taskEditing} oninput={onTask}></textarea>
+          <button disabled={!changed} onclick={onSave}>Save</button>
+        {/if}
+      </div>
+    </div>
+  {/if}
+</Main>
 
 <style>
   .grid {

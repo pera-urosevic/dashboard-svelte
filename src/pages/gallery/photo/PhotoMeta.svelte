@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { PhotoRecord } from '@pages/gallery/types'
-  import { fixCopyright, fixDatetime, fixDescription, fixKeywords, fixTitle, lint } from '@pages/gallery/lint'
+  import type { PhotoRecord } from '@pages/gallery/shared/types'
+  import { fixCopyright, fixDatetime, fixDescription, fixKeywords, fixTitle, lint } from '@pages/gallery/photo/lint'
 
   interface Props {
     record: PhotoRecord

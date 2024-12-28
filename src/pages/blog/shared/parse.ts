@@ -1,4 +1,4 @@
-import { Category, type PostObject, type PostRecord } from '@pages/blog/types'
+import { Category, type PostObject, type PostRecord } from '@pages/blog/shared/types'
 import dayjs from 'dayjs'
 
 export const parsePostRecord = (postRecord: PostRecord): PostObject => {

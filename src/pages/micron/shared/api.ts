@@ -1,5 +1,5 @@
-import type { Config } from '@pages/micron/types'
-import { busy } from '../../store'
+import type { Config } from '@pages/micron/shared/types'
+import { busy } from '@services/store'
 
 const SERVER = `${import.meta.env.VITE_API_SERVER}/micron`
 

@@ -1,7 +1,7 @@
 import { alertServerError } from '@services/alert'
-import { busy } from '../../store'
-import type { PostObject, PostRecord } from '@pages/blog/types'
-import { parsePostRecord } from '@pages/blog/parse'
+import { busy } from '@services/store'
+import type { PostObject, PostRecord } from '@pages/blog/shared/types'
+import { parsePostRecord } from '@pages/blog/shared/parse'
 
 const API = import.meta.env.VITE_API_SERVER
 

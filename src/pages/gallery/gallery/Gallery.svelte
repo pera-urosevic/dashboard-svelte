@@ -2,29 +2,23 @@
   import Header from '@components/Header.svelte'
   import Intersect from '@components/Intersect.svelte'
   import Main from '@components/Main.svelte'
-  import Page from '@components/Page.svelte'
-  import { apiGallery, apiGalleryDeploy, apiGallerySync } from '@pages/gallery/api'
-  import { parseRecords } from '@pages/gallery/parser'
-  import type { PhotoObject, PhotoRecord } from '@pages/gallery/types'
+  import { apiGallery, apiGalleryDeploy, apiGallerySync } from '@pages/gallery/shared/api'
+  import { parseRecords } from '@pages/gallery/gallery/parser'
+  import type { PhotoObject, PhotoRecord } from '@pages/gallery/shared/types'
   import { onMount } from 'svelte'
 
-  type Props = {
-    search: string
-    show: string
-  }
-  const props: Props = $props()
-
+  const params = new URLSearchParams(window.location.search)
   const chunkSize = 7 * 3
 
-  let search = $state<string>(props.search || '')
-  let show = $state<string>(props.show || 'all')
+  let search = $state<string>(params.get('search') || '')
+  let show = $state<string>(params.get('show') || 'all')
   let records = $state<PhotoRecord[]>([])
   let photos = $derived<PhotoObject[]>(parseRecords(records, show))
   let count = $state(chunkSize)
   let visiblePhotos = $derived(photos.slice(0, count))
 
   const updateUrl = () => {
-    window.location.href = `#page=gallery&search=${search}&show=${show}`
+    window.location.href = `/gallery.html?search=${search}&show=${show}`
   }
 
   const onSync = async () => {
@@ -56,49 +50,47 @@
   })
 </script>
 
-<Page title="Gallery" favicon="gallery">
-  <Header>
-    <a href="#page=gallery">Gallery</a>
-    <button onclick={onSync}>Sync</button>
-    <div class="filter">
-      <input type="text" name="search" placeholder="Search" value={search} onchange={onSearch} />
-      <div class="radio">
-        <label for="all">All</label>
-        <input type="radio" name="show" id="all" value="all" checked={show == 'all'} onchange={onShow} />
-      </div>
-      <div class="radio">
-        <label for="fix">Fix</label>
-        <input type="radio" name="show" id="fix" value="fix" checked={show == 'fix'} onchange={onShow} />
-      </div>
+<Header>
+  <a href="/gallery.html">Gallery</a>
+  <button onclick={onSync}>Sync</button>
+  <div class="filter">
+    <input type="text" name="search" placeholder="Search" value={search} onchange={onSearch} />
+    <div class="radio">
+      <label for="all">All</label>
+      <input type="radio" name="show" id="all" value="all" checked={show == 'all'} onchange={onShow} />
     </div>
-    <button onclick={onDeploy}>Deploy</button>
-  </Header>
-  <Main>
-    <div class="gallery">
-      <div class="count">
-        {photos.length}
-      </div>
-      <Intersect onIntersect={onMore}>
-        {#each visiblePhotos as photo}
-          <a
-            class="photo"
-            class:offline={photo.offline}
-            class:fix={photo.fix}
-            href={`#page=gallery&photoID=${photo.id}`}
-          >
-            <div class="thumbnail">
-              <img src={photo.imageThumbnail} alt={photo.title} />
-            </div>
-            <span class="title">{photo.title}</span>
-            <span class="description">{photo.description}</span>
-            <span class="album">{photo.album}</span>
-            <span class="datetime">{photo.datetime}</span>
-          </a>
-        {/each}
-      </Intersect>
+    <div class="radio">
+      <label for="fix">Fix</label>
+      <input type="radio" name="show" id="fix" value="fix" checked={show == 'fix'} onchange={onShow} />
     </div>
-  </Main>
-</Page>
+  </div>
+  <button onclick={onDeploy}>Deploy</button>
+</Header>
+<Main>
+  <div class="gallery">
+    <div class="count">
+      {photos.length}
+    </div>
+    <Intersect onIntersect={onMore}>
+      {#each visiblePhotos as photo}
+        <a
+          class="photo"
+          class:offline={photo.offline}
+          class:fix={photo.fix}
+          href={`/gallery-photo.html?id=${photo.id}`}
+        >
+          <div class="thumbnail">
+            <img src={photo.imageThumbnail} alt={photo.title} />
+          </div>
+          <span class="title">{photo.title}</span>
+          <span class="description">{photo.description}</span>
+          <span class="album">{photo.album}</span>
+          <span class="datetime">{photo.datetime}</span>
+        </a>
+      {/each}
+    </Intersect>
+  </div>
+</Main>
 
 <style>
   .filter {

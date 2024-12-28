@@ -1,11 +1,10 @@
 <script lang="ts">
-  import Page from '@components/Page.svelte'
   import Header from '@components/Header.svelte'
   import Main from '@components/Main.svelte'
   import { onMount } from 'svelte'
-  import type { PostObject } from '@pages/blog/types'
+  import type { PostObject } from '@pages/blog/shared/types'
   import Intersect from '@components/Intersect.svelte'
-  import { apiBlogDeploy, apiPostCreate, apiBlog } from '@pages/blog/api'
+  import { apiBlogDeploy, apiPostCreate, apiBlog } from '@pages/blog/shared/api'
 
   const chunkSize = 7 * 4
 
@@ -32,7 +31,7 @@
     if (!url) return
     const id = await apiPostCreate(url)
     if (!id) return
-    window.location.href = `#page=blog&postID=${id}`
+    window.location.href = `/blog-post.html?id=${id}`
   }
 
   const onDeploy = async () => {
@@ -44,30 +43,28 @@
   })
 </script>
 
-<Page title="Blog" favicon="blog">
-  <Header>
-    <a href="#page=blog">Blog</a>
-    <input placeholder="Search" value={search} onchange={onSearch} />
-    <button class="create" onclick={onCreate}>Create</button>
-    <button class="deploy" onclick={onDeploy}>Deploy</button>
-  </Header>
-  <Main>
-    <div class="posts">
-      <div class="count">
-        {posts.length}
-      </div>
-      <Intersect onIntersect={onMore}>
-        {#each visiblePosts as post}
-          <a class="post" class:draft={post.status === 'Draft'} href={`#page=blog&postID=${post.id}`}>
-            <img class="thumbnail" src={post.imageThumbnail} alt={post.title} />
-            <span class="title">{post.title}</span>
-            <span class="datetime">{post.datetime}</span>
-          </a>
-        {/each}
-      </Intersect>
+<Header>
+  <a href="/blog.html">Blog</a>
+  <input placeholder="Search" value={search} onchange={onSearch} />
+  <button class="create" onclick={onCreate}>Create</button>
+  <button class="deploy" onclick={onDeploy}>Deploy</button>
+</Header>
+<Main>
+  <div class="posts">
+    <div class="count">
+      {posts.length}
     </div>
-  </Main>
-</Page>
+    <Intersect onIntersect={onMore}>
+      {#each visiblePosts as post}
+        <a class="post" class:draft={post.status === 'Draft'} href={`/blog-post.html?id=${post.id}`}>
+          <img class="thumbnail" src={post.imageThumbnail} alt={post.title} />
+          <span class="title">{post.title}</span>
+          <span class="datetime">{post.datetime}</span>
+        </a>
+      {/each}
+    </Intersect>
+  </div>
+</Main>
 
 <style>
   .count {

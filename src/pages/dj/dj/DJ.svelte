@@ -1,9 +1,8 @@
 <script lang="ts">
   import Header from '@components/Header.svelte'
   import Main from '@components/Main.svelte'
-  import Page from '@components/Page.svelte'
-  import { apiQueries, apiQuery, apiSearch, apiSync } from '@pages/dj/api'
-  import type { Results, Sync } from '@pages/dj/types'
+  import { apiQueries, apiQuery, apiSearch, apiSync } from '@pages/dj/shared/api'
+  import type { Results, Sync } from '@pages/dj/shared/types'
   import { onMount } from 'svelte'
 
   let queryEditor = $state<string>('')
@@ -54,78 +53,76 @@
   }
 </script>
 
-<Page title="DJ" favicon="dj">
-  <Header>
-    <a href="#page=dj">DJ</a>
-  </Header>
-  <Main>
-    {#if queries}
-      <div class="container">
-        <div class="actions">
-          <form onsubmit={onSync}>
-            <button type="submit">Sync</button>
-          </form>
-          <form onsubmit={onSearch}>
-            <input oninput={onSearchInput} value={search} />
-            <button type="submit">Search</button>
-          </form>
-          <form onsubmit={onQuery}>
-            <select oninput={onQuerySelect} value={querySelected}>
-              {#each Object.keys(queries) as key}
-                <option value={key}>{key}</option>
-              {/each}
-            </select>
-            <button type="submit">Query</button>
-          </form>
-        </div>
-        {#if results}
-          {#if results.length === 0}
-            Nothing found
-          {:else}
-            <div class="results">
-              {#each results as result}
-                <details class="result">
-                  <summary class="path">[{result.query}] {result.path}</summary>
-                  <div class="meta">
-                    {#each Object.entries(result.meta) as [key, value]}
-                      <div class="key">
-                        {key}
-                      </div>
-                      <div class="value">
-                        {JSON.stringify(value, null, 2)}
-                      </div>
-                    {/each}
-                  </div>
-                  <div class="datetime">{result.datetime}</div>
-                </details>
-              {/each}
-            </div>
-          {/if}
-        {/if}
-        {#if sync}
-          {#if sync.removed.length === 0 && sync.added.length === 0}
-            Nothing to sync
-          {:else}
-            <div class="sync">
-              {#each Object.entries(sync) as [key, value]}
-                <div>
-                  <div class="group">{key}</div>
-                  <div class="items">
-                    {#each value as item}
-                      <div class="item">
-                        {item}
-                      </div>
-                    {/each}
-                  </div>
-                </div>
-              {/each}
-            </div>
-          {/if}
-        {/if}
+<Header>
+  <a href="/dj.html">DJ</a>
+</Header>
+<Main>
+  {#if queries}
+    <div class="container">
+      <div class="actions">
+        <form onsubmit={onSync}>
+          <button type="submit">Sync</button>
+        </form>
+        <form onsubmit={onSearch}>
+          <input oninput={onSearchInput} value={search} />
+          <button type="submit">Search</button>
+        </form>
+        <form onsubmit={onQuery}>
+          <select oninput={onQuerySelect} value={querySelected}>
+            {#each Object.keys(queries) as key}
+              <option value={key}>{key}</option>
+            {/each}
+          </select>
+          <button type="submit">Query</button>
+        </form>
       </div>
-    {/if}
-  </Main>
-</Page>
+      {#if results}
+        {#if results.length === 0}
+          Nothing found
+        {:else}
+          <div class="results">
+            {#each results as result}
+              <details class="result">
+                <summary class="path">[{result.query}] {result.path}</summary>
+                <div class="meta">
+                  {#each Object.entries(result.meta) as [key, value]}
+                    <div class="key">
+                      {key}
+                    </div>
+                    <div class="value">
+                      {JSON.stringify(value, null, 2)}
+                    </div>
+                  {/each}
+                </div>
+                <div class="datetime">{result.datetime}</div>
+              </details>
+            {/each}
+          </div>
+        {/if}
+      {/if}
+      {#if sync}
+        {#if sync.removed.length === 0 && sync.added.length === 0}
+          Nothing to sync
+        {:else}
+          <div class="sync">
+            {#each Object.entries(sync) as [key, value]}
+              <div>
+                <div class="group">{key}</div>
+                <div class="items">
+                  {#each value as item}
+                    <div class="item">
+                      {item}
+                    </div>
+                  {/each}
+                </div>
+              </div>
+            {/each}
+          </div>
+        {/if}
+      {/if}
+    </div>
+  {/if}
+</Main>
 
 <style>
   .container {

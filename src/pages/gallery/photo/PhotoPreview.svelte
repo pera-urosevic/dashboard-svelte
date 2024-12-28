@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { apiPhotoOpen } from '@pages/gallery/api'
+  import { apiPhotoOpen } from '@pages/gallery/shared/api'
 
   interface Props {
     url: string

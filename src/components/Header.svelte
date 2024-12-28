@@ -1,5 +1,7 @@
 <script lang="ts">
   import type { Snippet } from 'svelte'
+  import { busy } from '../services/store'
+  import Busy from '@components/Busy.svelte'
 
   type Props = {
     children?: Snippet
@@ -8,9 +10,13 @@
 </script>
 
 <header class="header">
-  <a class="home" href="/#page=home">Admin</a>
+  <a class="home" href="/index.html">Admin</a>
   {@render children?.()}
 </header>
+
+{#if $busy}
+  <Busy />
+{/if}
 
 <style>
   .header {

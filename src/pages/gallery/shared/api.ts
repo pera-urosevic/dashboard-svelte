@@ -1,6 +1,6 @@
-import type { PhotoRecord } from '@pages/gallery/types'
+import type { PhotoRecord } from '@pages/gallery/shared/types'
 import { alertServerError } from '@services/alert'
-import { busy } from '../../store'
+import { busy } from '@services/store'
 
 const SERVER = `${import.meta.env.VITE_API_SERVER}/gallery`
 

@@ -1,4 +1,4 @@
-import type { PhotoRecord } from '@pages/gallery/types'
+import type { PhotoRecord } from '@pages/gallery/shared/types'
 import { caseTitle } from '@services/text'
 import dayjs from 'dayjs'
 

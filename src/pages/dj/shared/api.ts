@@ -1,5 +1,5 @@
-import type { Results, Sync } from '@pages/dj/types'
-import { busy } from '../../store'
+import type { Results, Sync } from '@pages/dj/shared/types'
+import { busy } from '@services/store'
 
 const SERVER = `${import.meta.env.VITE_API_SERVER}/dj`
 
