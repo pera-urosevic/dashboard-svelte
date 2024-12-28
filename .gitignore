@@ -28,3 +28,4 @@ dist-ssr
 *.sh
 *.ps1
 .favorites.json
+pnpm-lock.yaml
