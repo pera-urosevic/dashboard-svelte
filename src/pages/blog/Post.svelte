@@ -76,7 +76,7 @@
           <label for="template">Template</label>
           <select id="template" title="Template" bind:value={post.template}>
             {#each Object.entries(Template) as [key, value]}
-              <option value={key}>{value}</option>
+              <option {value}>{value}</option>
             {/each}
           </select>
           &nbsp;
