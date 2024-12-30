@@ -56,9 +56,9 @@
           <button onclick={onScrape}>Scrape</button>
         </div>
         <label for="title">Title</label>
-        <input id="title" title="Title" type="text" bind:value={post.title} />
+        <input id="title" title="Title" type="text" bind:value={post.title} spellcheck />
         <label for="description">Description</label>
-        <textarea id="description" title="Description" bind:value={post.description}></textarea>
+        <textarea id="description" title="Description" bind:value={post.description} spellcheck></textarea>
         <label for="image">Image</label>
         <input disabled id="image" title="Image" type="text" bind:value={post.image} />
         <label for="category">Category</label>

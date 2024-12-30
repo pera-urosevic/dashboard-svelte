@@ -60,15 +60,15 @@
 
 <div class="form">
   <label for="title" title={warnings.title} class:warning={warnings.title}>Title</label>
-  <input id="title" name="title" type="text" value={meta.title} onchange={onTitle} />
+  <input id="title" name="title" type="text" value={meta.title} onchange={onTitle} spellcheck />
   <button disabled={!warnings.title} class="fix" onclick={onFixTitle}>🪄</button>
 
   <label for="description" title={warnings.description} class:warning={warnings.description}>Description</label>
-  <input id="description" name="description" type="text" value={meta.description} onchange={onDescription} />
+  <input id="description" name="description" type="text" value={meta.description} onchange={onDescription} spellcheck />
   <button disabled={!warnings.description} class="fix" onclick={onFixDescription}>🪄</button>
 
   <label for="keywords" title={warnings.keywords} class:warning={warnings.keywords}>Keywords</label>
-  <input id="keywords" name="keywords" type="text" value={meta.keywords} onchange={onKeywords} />
+  <input id="keywords" name="keywords" type="text" value={meta.keywords} onchange={onKeywords} spellcheck />
   <button disabled={!warnings.keywords} class="fix" onclick={onFixKeywords}>🪄</button>
 
   <label for="datetime" title={warnings.datetime} class:warning={warnings.datetime}>Datetime</label>
