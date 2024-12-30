@@ -62,7 +62,7 @@ export const apiPhotoUpdate = async (record: PhotoRecord) => {
 
 export const apiPhotoOpen = async (photoPath: string) => {
   busy.set(true)
-  const res = await fetch(`${SERVER}/open/${photoPath}`)
+  const res = await fetch(`${SERVER}/open/${encodeURIComponent(photoPath)}`)
   busy.set(false)
   if (!res.ok) return alertServerError(res)
 }
