@@ -58,5 +58,6 @@
     justify-content: center;
     align-items: center;
     background-color: var(--color-mask);
+    z-index: 1000;
   }
 </style>
