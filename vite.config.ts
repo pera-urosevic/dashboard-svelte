@@ -17,6 +17,7 @@ export default defineConfig({
         'gallery': '/gallery.html',
         'gallery-photo': '/gallery-photo.html',
         'micron': '/micron.html',
+        'cleaner': '/cleaner.html',
       },
       output: {
         dir: './dist',

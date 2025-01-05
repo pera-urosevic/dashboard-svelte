@@ -7,6 +7,7 @@
   <a class="page" href="/gallery.html">Gallery</a>
   <a class="page" href="/micron.html">Micron</a>
   <a class="page" href="/dj.html">DJ</a>
+  <a class="page" href="/cleaner.html">Cleaner</a>
 </Header>
 
 <style>
