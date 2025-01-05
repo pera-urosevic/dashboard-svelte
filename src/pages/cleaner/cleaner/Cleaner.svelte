@@ -89,6 +89,7 @@
     padding-right: 16px;
   }
   .grid {
+    margin-top: 10px;
     display: grid;
     grid-template-columns: auto 1fr auto auto;
     align-items: center;
