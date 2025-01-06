@@ -14,6 +14,8 @@
   let sortedEntries = $derived.by(() => {
     const sorted = [...entries]
     sorted.sort((a, b) => {
+      if (a.ok && !b.ok) return 1
+      if (!a.ok && b.ok) return -1
       if (a.size < 0 && b.size > -1) return -1
       if (a.size > -1 && b.size < 0) return 1
       return a.name.localeCompare(b.name)
