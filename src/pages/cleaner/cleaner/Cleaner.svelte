@@ -4,7 +4,7 @@
   import Bookmarks from '@pages/cleaner/cleaner/Bookmarks.svelte'
   import Breadcrumbs from '@pages/cleaner/cleaner/Breadcrumbs.svelte'
   import Status from '@pages/cleaner/cleaner/Status.svelte'
-  import { apiAdd, apiList, apiOpen, apiRemove } from '@pages/cleaner/shared/api'
+  import { apiAdd, apiDelete, apiList, apiOpen, apiRemove } from '@pages/cleaner/shared/api'
   import type { Entry } from '@pages/cleaner/shared/types'
   import { onMount } from 'svelte'
 
@@ -51,6 +51,14 @@
     await apiOpen(pathOpen)
   }
 
+  const onDelete = async (entry: Entry) => {
+    const confirmed = window.confirm(`Delete ${entry.name}?`)
+    if (!confirmed) return
+    const data = await apiDelete(path, entry.name)
+    if (!data) return
+    entries = data
+  }
+
   onMount(async () => {
     const pathInitial = decodeURIComponent(window.location.hash.slice(1)) || '/'
     onPath(pathInitial)
@@ -65,21 +73,29 @@
   <div class="container">
     <Breadcrumbs {path} {onPath} {onOpen} />
     <div class="grid">
-      <div class="status">Status</div>
-      <div class="name">Name</div>
-      <div class="size">Size</div>
-      <div class="modified">Modified</div>
-      {#each sortedEntries as entry}
-        <div class="status"><Status {entry} {onAdd} {onRemove} /></div>
-        {#if entry.size < 0}
-          <div class="name" title={entry.name}><button onclick={() => onFolder(entry.name)}>{entry.name}</button></div>
-          <div class="size">0</div>
-        {:else}
-          <div class="name" title={entry.name}>{entry.name}</div>
-          <div class="size">{entry.size}</div>
-        {/if}
-        <div class="modified">{entry.modified}</div>
-      {/each}
+      {#if entries.length === 0}
+        Nothing found...
+      {:else}
+        <div class="status"></div>
+        <div class="delete"></div>
+        <div class="name">Name</div>
+        <div class="size">Size</div>
+        <div class="modified">Modified</div>
+        {#each sortedEntries as entry}
+          <div class="status"><Status {entry} {onAdd} {onRemove} /></div>
+          <div class="delete"><button onclick={() => onDelete(entry)}>🗑️</button></div>
+          {#if entry.size < 0}
+            <div class="name" title={entry.name}>
+              <button onclick={() => onFolder(entry.name)}>{entry.name}</button>
+            </div>
+            <div class="size">0</div>
+          {:else}
+            <div class="name" title={entry.name}>{entry.name}</div>
+            <div class="size">{entry.size}</div>
+          {/if}
+          <div class="modified">{entry.modified}</div>
+        {/each}
+      {/if}
     </div>
   </div>
 </Main>
@@ -93,7 +109,7 @@
   .grid {
     margin-top: 10px;
     display: grid;
-    grid-template-columns: auto 1fr auto auto;
+    grid-template-columns: auto auto 1fr auto auto;
     align-items: center;
     gap: 16px;
     row-gap: 8px;

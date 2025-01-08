@@ -95,3 +95,18 @@ export const apiRemove = async (path: string, name: string) => {
   return data as Entry[]
 }
 
+export const apiDelete = async (path: string, name: string) => {
+  busy.set(true)
+  const res = await fetch(`${SERVER}/delete`, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ path, name }),
+  })
+  busy.set(false)
+  if (!res.ok) {
+    alertServerError(res)
+  }
+  const data = await res.json()
+  return data as Entry[]
+}
+
