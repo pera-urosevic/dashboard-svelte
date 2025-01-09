@@ -102,12 +102,21 @@
 
   const onSave = async () => {
     if (!config || !taskSelected || !taskEditing || !groupSelected) return
+    let error = false
     config[groupSelected] = config[groupSelected].map((task) => {
       if (task === taskSelected) {
-        return JSON.parse(taskEditing!)
+        try {
+          const json = JSON.parse(taskEditing!)
+          return json
+        } catch (e) {
+          alert(e)
+          error = true
+          return task
+        }
       }
       return task
     })
+    if (error) return
     await apiConfigUpdate(config)
     groupSelected = undefined
     taskSelected = undefined
