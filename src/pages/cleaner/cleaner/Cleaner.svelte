@@ -113,9 +113,6 @@
     align-items: center;
     gap: 16px;
     row-gap: 8px;
-    .ok {
-      white-space: wrap;
-    }
     .name {
       white-space: nowrap;
       overflow: hidden;

@@ -1,11 +1,13 @@
 <script lang="ts">
   import Header from '@components/Header.svelte'
   import Main from '@components/Main.svelte'
-  import { apiPhoto, apiPhotoFlickr, apiPhotoUpdate } from '@pages/gallery/shared/api'
+  import { apiPhoto, apiPhotoUpdate } from '@pages/gallery/shared/api'
   import PhotoMeta from '@pages/gallery/photo/PhotoMeta.svelte'
   import PhotoPreview from '@pages/gallery/photo/PhotoPreview.svelte'
   import type { PhotoRecord } from '@pages/gallery/shared/types'
   import { onMount } from 'svelte'
+  import dayjs from 'dayjs'
+  import PhotoInfo from '@pages/gallery/photo/PhotoInfo.svelte'
 
   const params = new URLSearchParams(window.location.search)
   const id = Number(params.get('id'))
@@ -13,8 +15,32 @@
   let flickLog = $state<string>()
   let record = $state<PhotoRecord>()
 
-  const onFlickr = () => {
-    apiPhotoFlickr(id)
+  const onFlickr = async () => {
+    if (!record) return
+    const recordNew = { ...record }
+    if (recordNew.flickr) {
+      recordNew.flickr = ''
+    } else {
+      recordNew.flickr = recordNew.flickr ? '' : dayjs().format('YYYY-MM-DD HH:mm:ss')
+      window.open('https://www.flickr.com/photos/upload/', '_blank')
+    }
+    const data = await apiPhotoUpdate(recordNew)
+    if (!data) return
+    record = data
+  }
+
+  const onPixelfed = async () => {
+    if (!record) return
+    const recordNew = { ...record }
+    if (recordNew.pixelfed) {
+      recordNew.pixelfed = ''
+    } else {
+      recordNew.pixelfed = recordNew.pixelfed ? '' : dayjs().format('YYYY-MM-DD HH:mm:ss')
+      window.open('https://pixelfed.social/i/web/compose', '_blank')
+    }
+    const data = await apiPhotoUpdate(recordNew)
+    if (!data) return
+    record = data
   }
 
   const onUpdate = async (meta: PhotoRecord) => {
@@ -32,7 +58,8 @@
 
 <Header>
   <a href="/gallery.html">Gallery</a>
-  <button onclick={onFlickr}>Flickr</button>
+  <button onclick={onFlickr} title={record?.flickr}>Flickr {record?.flickr ? '🟢' : '🔴'}</button>
+  <button onclick={onPixelfed} title={record?.pixelfed}>Pixelfed {record?.pixelfed ? '🟢' : '🔴'}</button>
 </Header>
 <Main>
   {#if flickLog}
@@ -44,7 +71,10 @@
   {/if}
   {#if record}
     <div class="editor">
-      <PhotoMeta {record} {onUpdate} />
+      <div>
+        <PhotoMeta {record} {onUpdate} />
+        <PhotoInfo {record} />
+      </div>
       <PhotoPreview
         url={`${import.meta.env.VITE_GALLERY_CDN}/images/${record.album} - ${record.datetime}.${record.type}`}
         path={record.path}

@@ -11,6 +11,7 @@
   const chunkSize = 7 * 3
 
   let search = $state<string>(params.get('search') || '')
+  let sort = $state<string>(params.get('sort') || 'desc')
   let show = $state<string>(params.get('show') || 'all')
   let records = $state<PhotoRecord[]>([])
   let photos = $derived<PhotoObject[]>(parseRecords(records, show))
@@ -18,7 +19,7 @@
   let visiblePhotos = $derived(photos.slice(0, count))
 
   const updateUrl = () => {
-    window.location.href = `/gallery.html?search=${search}&show=${show}`
+    window.location.href = `/gallery.html?search=${search}&sort=${sort}&show=${show}`
   }
 
   const onSync = async () => {
@@ -30,12 +31,17 @@
 
   const onSearch = async (e: Event) => {
     search = (e.target as HTMLInputElement).value
-    records = await apiGallery(search)
+    records = await apiGallery(search, sort)
     updateUrl()
   }
 
   const onShow = (e: Event) => {
     show = (e.target as HTMLInputElement).value
+    updateUrl()
+  }
+
+  const onSort = (e: Event) => {
+    sort = (e.target as HTMLInputElement).value
     updateUrl()
   }
 
@@ -46,7 +52,7 @@
   const onMore = () => (count += chunkSize)
 
   onMount(async () => {
-    records = await apiGallery(search)
+    records = await apiGallery(search, sort)
   })
 </script>
 
@@ -54,6 +60,14 @@
   <a href="/gallery.html">Gallery</a>
   <button onclick={onSync}>Sync</button>
   <div class="filter">
+    <div class="radio">
+      <label for="asc">Asc</label>
+      <input type="radio" name="sort" id="asc" value="asc" checked={sort == 'asc'} onchange={onSort} />
+    </div>
+    <div class="radio">
+      <label for="desc">Desc</label>
+      <input type="radio" name="sort" id="desc" value="desc" checked={sort == 'desc'} onchange={onSort} />
+    </div>
     <input type="text" name="search" placeholder="Search" value={search} onchange={onSearch} />
     <div class="radio">
       <label for="all">All</label>
@@ -84,6 +98,10 @@
           </div>
           <span class="title">{photo.title}</span>
           <span class="description">{photo.description}</span>
+          <span class="upload">
+            {photo.flickr ? '🟢' : '🔴'}
+            {photo.pixelfed ? '🟢' : '🔴'}
+          </span>
           <span class="album">{photo.album}</span>
           <span class="datetime">{photo.datetime}</span>
         </a>
@@ -137,9 +155,7 @@
       gap: 2px;
       background-color: var(--color-dark);
       &.offline {
-        > * {
-          opacity: 0.25;
-        }
+        opacity: 0.1;
       }
       &.fix {
         border: 1px solid var(--color-error);
@@ -182,6 +198,9 @@
         line-height: 1rem;
         font-size: 0.7rem;
         opacity: 0.3;
+      }
+      .upload {
+        font-size: 10px;
       }
     }
   }

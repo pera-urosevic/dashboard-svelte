@@ -4,9 +4,9 @@ import { busy } from '@services/store'
 
 const SERVER = `${import.meta.env.VITE_API_SERVER}/gallery`
 
-export const apiGallery = async (search: string) => {
+export const apiGallery = async (search: string, sort: string) => {
   busy.set(true)
-  const res = await fetch(`${SERVER}/${encodeURIComponent(search)}`)
+  const res = await fetch(`${SERVER}/${encodeURIComponent(sort)}/${encodeURIComponent(search)}`)
   busy.set(false)
   if (!res.ok) {
     alertServerError(res)
@@ -66,11 +66,3 @@ export const apiPhotoOpen = async (photoPath: string) => {
   busy.set(false)
   if (!res.ok) return alertServerError(res)
 }
-
-export const apiPhotoFlickr = async (photoID: number) => {
-  busy.set(true)
-  const res = await fetch(`${SERVER}/photo/${photoID}/flickr`)
-  busy.set(false)
-  if (!res.ok) return alertServerError(res)
-}
-

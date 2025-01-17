@@ -18,6 +18,8 @@ export const parseRecords = (records: PhotoRecord[], show: string): PhotoObject[
       imageThumbnail: `${import.meta.env.VITE_GALLERY_CDN}/thumbnails/${record.album} - ${record.datetime}.${record.type}`,
       fix: !isValid(record),
       offline: !record.online,
+      flickr: record.flickr,
+      pixelfed: record.pixelfed,
     }
     return photo
   }).filter((photo) => {
