@@ -1,4 +1,4 @@
-import type { Entry } from '@pages/cleaner/shared/types'
+import type { Entry, EntryNode } from '@pages/cleaner/shared/types'
 import { alertServerError } from '@services/alert'
 import { busy } from '@services/store'
 
@@ -108,5 +108,16 @@ export const apiDelete = async (path: string, name: string) => {
   }
   const data = await res.json()
   return data as Entry[]
+}
+
+export const apiUnknown = async () => {
+  busy.set(true)
+  const res = await fetch(`${SERVER}/unknown`)
+  busy.set(false)
+  if (!res.ok) {
+    alertServerError(res)
+  }
+  const data = await res.json()
+  return data as EntryNode[]
 }
 

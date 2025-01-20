@@ -5,3 +5,8 @@ export type Entry = {
   ok: number
   recursive: number
 }
+
+export type EntryNode = {
+  entry: Entry
+  children: EntryNode[]
+}

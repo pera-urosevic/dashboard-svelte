@@ -67,6 +67,7 @@
 
 <Header>
   <a href="/cleaner.html">Cleaner</a>
+  <a href="/cleaner-unknown.html">Unknown</a>
   <Bookmarks {path} {onPath} />
 </Header>
 <Main>
