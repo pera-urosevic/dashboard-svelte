@@ -43,7 +43,7 @@
       <option value={bookmark}>{bookmark}</option>
     {/each}
   </select>
-  <button disabled={!bookmark}>🗑️</button>
+  <button onclick={onRemoveBookmark} disabled={!bookmark}>🗑️</button>
   <button onclick={onAddBookmark}>➕</button>
 {/if}
 
