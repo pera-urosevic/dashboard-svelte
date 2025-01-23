@@ -12,6 +12,7 @@
 
   let search = $state<string>(params.get('search') || '')
   let sort = $state<string>(params.get('sort') || 'desc')
+  let pixelfed = $state<boolean>(params.get('pixelfed') === 'true')
   let show = $state<string>(params.get('show') || 'all')
   let records = $state<PhotoRecord[]>([])
   let photos = $derived<PhotoObject[]>(parseRecords(records, show))
@@ -19,7 +20,7 @@
   let visiblePhotos = $derived(photos.slice(0, count))
 
   const updateUrl = () => {
-    window.location.href = `/gallery.html?search=${search}&sort=${sort}&show=${show}`
+    window.location.href = `/gallery.html?search=${search}&sort=${sort}&pixelfed=${pixelfed}&show=${show}`
   }
 
   const onSync = async () => {
@@ -31,7 +32,13 @@
 
   const onSearch = async (e: Event) => {
     search = (e.target as HTMLInputElement).value
-    records = await apiGallery(search, sort)
+    records = await apiGallery(search, sort, pixelfed)
+    updateUrl()
+  }
+
+  const onPixelfed = async (e: Event) => {
+    pixelfed = (e.target as HTMLInputElement).checked
+    records = await apiGallery(search, sort, pixelfed)
     updateUrl()
   }
 
@@ -52,7 +59,7 @@
   const onMore = () => (count += chunkSize)
 
   onMount(async () => {
-    records = await apiGallery(search, sort)
+    records = await apiGallery(search, sort, pixelfed)
   })
 </script>
 
@@ -60,20 +67,24 @@
   <a href="/gallery.html">Gallery</a>
   <button onclick={onSync}>Sync</button>
   <div class="filter">
-    <div class="radio">
+    <div class="labeled">
       <label for="asc">Asc</label>
       <input type="radio" name="sort" id="asc" value="asc" checked={sort == 'asc'} onchange={onSort} />
     </div>
-    <div class="radio">
+    <div class="labeled">
       <label for="desc">Desc</label>
       <input type="radio" name="sort" id="desc" value="desc" checked={sort == 'desc'} onchange={onSort} />
     </div>
+    <div class="labeled">
+      <label for="desc">Pixelfed</label>
+      <input type="checkbox" name="pixelfed" checked={pixelfed} onchange={onPixelfed} />
+    </div>
     <input type="text" name="search" placeholder="Search" value={search} onchange={onSearch} />
-    <div class="radio">
+    <div class="labeled">
       <label for="all">All</label>
       <input type="radio" name="show" id="all" value="all" checked={show == 'all'} onchange={onShow} />
     </div>
-    <div class="radio">
+    <div class="labeled">
       <label for="fix">Fix</label>
       <input type="radio" name="show" id="fix" value="fix" checked={show == 'fix'} onchange={onShow} />
     </div>
@@ -116,7 +127,7 @@
     align-items: center;
     font-size: 16px;
     gap: 8px;
-    .radio {
+    .labeled {
       display: flex;
       justify-content: start;
       align-items: center;

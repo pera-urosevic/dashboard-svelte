@@ -4,9 +4,12 @@ import { busy } from '@services/store'
 
 const SERVER = `${import.meta.env.VITE_API_SERVER}/gallery`
 
-export const apiGallery = async (search: string, sort: string) => {
+export const apiGallery = async (search: string, sort: string, pixelfed: boolean) => {
   busy.set(true)
-  const res = await fetch(`${SERVER}/${encodeURIComponent(sort)}/${encodeURIComponent(search)}`)
+  const sortParam = encodeURIComponent(sort)
+  const pixelfedParam = encodeURIComponent(pixelfed ? 'true' : 'false')
+  const searchParam = encodeURIComponent(search)
+  const res = await fetch(`${SERVER}/${sortParam}/${pixelfedParam}/${searchParam}`)
   busy.set(false)
   if (!res.ok) {
     alertServerError(res)
