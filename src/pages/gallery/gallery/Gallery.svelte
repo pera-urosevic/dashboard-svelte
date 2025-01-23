@@ -99,7 +99,6 @@
           <span class="title">{photo.title}</span>
           <span class="description">{photo.description}</span>
           <span class="upload">
-            {photo.flickr ? '🟢' : '🔴'}
             {photo.pixelfed ? '🟢' : '🔴'}
           </span>
           <span class="album">{photo.album}</span>

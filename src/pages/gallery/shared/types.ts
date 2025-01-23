@@ -10,7 +10,6 @@ export type PhotoRecord = {
   description: string
   keywords: string
   copyright: string
-  flickr: string
   pixelfed: string
 }
 
@@ -28,7 +27,6 @@ export type PhotoObject = {
   copyright: string
   imageThumbnail: string
   fix: boolean
-  flickr: string
   pixelfed: string
 }
 
