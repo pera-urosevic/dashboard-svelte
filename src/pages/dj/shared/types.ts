@@ -11,3 +11,8 @@ export type Sync = {
   added: string[]
   removed: string[]
 }
+
+export type Queries = {
+  name: string
+  query: string
+}[]

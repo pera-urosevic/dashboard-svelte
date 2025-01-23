@@ -2,23 +2,15 @@
   import Header from '@components/Header.svelte'
   import Main from '@components/Main.svelte'
   import { apiQueries, apiQuery, apiSearch, apiSync } from '@pages/dj/shared/api'
-  import type { Results, Sync } from '@pages/dj/shared/types'
+  import type { Queries, Results, Sync } from '@pages/dj/shared/types'
   import { onMount } from 'svelte'
 
   let queryEditor = $state<string>('')
-  let queries = $state<Record<string, string>>()
+  let queries = $state<Queries>([])
   let querySelected = $state<string>()
   let search = $state<string>()
   let results = $state<Results>()
   let sync = $state<Sync>()
-
-  onMount(async () => {
-    queries = await apiQueries()
-    if (queries) {
-      querySelected = Object.keys(queries)[0]
-    }
-    queryEditor = JSON.stringify(queries, null, 2)
-  })
 
   const onQuerySelect = async (e: Event) => {
     querySelected = (e.target as HTMLSelectElement).value
@@ -51,6 +43,14 @@
     sync.removed.sort((a, b) => a.localeCompare(b))
     sync.added.sort((a, b) => a.localeCompare(b))
   }
+
+  onMount(async () => {
+    queries = await apiQueries()
+    if (queries) {
+      querySelected = Object.keys(queries)[0]
+    }
+    queryEditor = JSON.stringify(queries, null, 2)
+  })
 </script>
 
 <Header>
@@ -69,8 +69,8 @@
         </form>
         <form onsubmit={onQuery}>
           <select oninput={onQuerySelect} value={querySelected}>
-            {#each Object.keys(queries) as key}
-              <option value={key}>{key}</option>
+            {#each queries as query}
+              <option value={query.name}>{query.name}</option>
             {/each}
           </select>
           <button type="submit">Query</button>

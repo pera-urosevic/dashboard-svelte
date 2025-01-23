@@ -1,4 +1,4 @@
-import type { Results, Sync } from '@pages/dj/shared/types'
+import type { Queries, Results, Sync } from '@pages/dj/shared/types'
 import { busy } from '@services/store'
 
 const SERVER = `${import.meta.env.VITE_API_SERVER}/dj`
@@ -8,7 +8,7 @@ export const apiQueries = async () => {
   const res = await fetch(`${SERVER}/queries`)
   busy.set(false)
   const data = await res.json()
-  return data
+  return data as Queries
 }
 
 export const apiQuery = async (query: string) => {
