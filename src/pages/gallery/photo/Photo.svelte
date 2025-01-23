@@ -12,22 +12,7 @@
   const params = new URLSearchParams(window.location.search)
   const id = Number(params.get('id'))
 
-  let flickLog = $state<string>()
   let record = $state<PhotoRecord>()
-
-  const onFlickr = async () => {
-    if (!record) return
-    const recordNew = { ...record }
-    if (recordNew.flickr) {
-      recordNew.flickr = ''
-    } else {
-      recordNew.flickr = recordNew.flickr ? '' : dayjs().format('YYYY-MM-DD HH:mm:ss')
-      window.open('https://www.flickr.com/photos/upload/', '_blank')
-    }
-    const data = await apiPhotoUpdate(recordNew)
-    if (!data) return
-    record = data
-  }
 
   const onPixelfed = async () => {
     if (!record) return
@@ -58,17 +43,9 @@
 
 <Header>
   <a href="/gallery.html">Gallery</a>
-  <button onclick={onFlickr} title={record?.flickr}>Flickr {record?.flickr ? '🟢' : '🔴'}</button>
   <button onclick={onPixelfed} title={record?.pixelfed}>Pixelfed {record?.pixelfed ? '🟢' : '🔴'}</button>
 </Header>
 <Main>
-  {#if flickLog}
-    <div class="log">
-      {#each flickLog as line}
-        <div class="line">{line}</div>
-      {/each}
-    </div>
-  {/if}
   {#if record}
     <div class="editor">
       <div>
