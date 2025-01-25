@@ -12,6 +12,8 @@
   let post = $state<PostObject>()
 
   const onRemove = async () => {
+    const confirmed = window.confirm('Delete this post?')
+    if (!confirmed) return
     const res = await apiPostRemove(id)
     if (res) {
       window.location.href = '/blog.html'
