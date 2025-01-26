@@ -30,7 +30,7 @@
   const onUpdate = async () => {
     const res = await apiPostUpdate(post)
     if (res) {
-      post = parsePostRecord(res)
+      window.location.href = `/blog.html`
     }
   }
 
