@@ -3,9 +3,9 @@
   import Main from '@components/Main.svelte'
   import Bookmarks from '@pages/cleaner/cleaner/Bookmarks.svelte'
   import Breadcrumbs from '@pages/cleaner/cleaner/Breadcrumbs.svelte'
-  import Status from '@pages/cleaner/cleaner/Status.svelte'
+  import Statuses from '@pages/cleaner/cleaner/Statuses.svelte'
   import { apiAdd, apiDelete, apiList, apiOpen, apiRemove } from '@pages/cleaner/shared/api'
-  import type { Entry } from '@pages/cleaner/shared/types'
+  import { Status, type Entry } from '@pages/cleaner/shared/types'
   import { onMount } from 'svelte'
 
   let path = $state<string>('')
@@ -14,8 +14,7 @@
   let sortedEntries = $derived.by(() => {
     const sorted = [...entries]
     sorted.sort((a, b) => {
-      if (a.ok && !b.ok) return 1
-      if (!a.ok && b.ok) return -1
+      if (a.status !== b.status) return a.status - b.status
       if (a.size < 0 && b.size > -1) return -1
       if (a.size > -1 && b.size < 0) return 1
       return a.name.localeCompare(b.name)
@@ -27,8 +26,11 @@
     await onPath([path, folder].join('/').replaceAll('//', '/'))
   }
 
-  const onAdd = async (entry: Entry) => {
-    const data = await apiAdd(path, entry.name)
+  const onAdd = async (entry: Entry, status: Status) => {
+    if (entry.status !== Status.Unknown) {
+      await apiRemove(path, entry.name)
+    }
+    const data = await apiAdd(path, entry.name, status)
     if (!data) return
     entries = data
   }
@@ -83,7 +85,7 @@
         <div class="size">Size</div>
         <div class="modified">Modified</div>
         {#each sortedEntries as entry}
-          <div class="status"><Status {entry} {onAdd} {onRemove} /></div>
+          <div class="status"><Statuses {entry} {onAdd} {onRemove} /></div>
           <div class="delete"><button onclick={() => onDelete(entry)}>🗑️</button></div>
           {#if entry.size < 0}
             <div class="name" title={entry.name}>

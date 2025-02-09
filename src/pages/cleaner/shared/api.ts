@@ -1,4 +1,4 @@
-import type { Entry, EntryNode } from '@pages/cleaner/shared/types'
+import type { Entry, EntryNode, Status } from '@pages/cleaner/shared/types'
 import { alertServerError } from '@services/alert'
 import { busy } from '@services/store'
 
@@ -65,12 +65,12 @@ export const apiOpen = async (path: string) => {
   }
 }
 
-export const apiAdd = async (path: string, name: string) => {
+export const apiAdd = async (path: string, name: string, status: Status) => {
   busy.set(true)
   const res = await fetch(`${SERVER}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ path, name }),
+    body: JSON.stringify({ path, name, status }),
   })
   busy.set(false)
   if (!res.ok) {
