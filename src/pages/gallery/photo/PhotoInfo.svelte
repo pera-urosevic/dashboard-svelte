@@ -53,7 +53,7 @@
     <br />
     {record.keywords
       .split(' | ')
-      .map((tag) => `#${tag}`)
+      .map((tag) => `#${tag.replaceAll(' ', '')}`)
       .join(' ')}
   </a>
   <div class="label">Collection</div>
