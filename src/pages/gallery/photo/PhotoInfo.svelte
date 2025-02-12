@@ -29,20 +29,6 @@
   }
 </script>
 
-<div class="section">Flickr</div>
-<div class="info">
-  <div class="label">Path</div>
-  <a href="#copy" class="copy" onclick={onCopy}>{record.path}</a>
-  <div class="label">Title</div>
-  <a href="#copy" class="copy" onclick={onCopy}>{record.title}</a>
-  <div class="label">Description</div>
-  <a href="#copy" class="copy" onclick={onCopy}>{record.description}</a>
-  <div class="label">Tags</div>
-  <a href="#copy" class="copy" onclick={onCopy}>{record.keywords.split(' | ').join(' ')}</a>
-  <div class="label">Album</div>
-  <a href="#copy" class="copy" onclick={onCopy}>{record.album}</a>
-</div>
-
 <div class="section">Pixelfed</div>
 <div class="info">
   <div class="label">Path</div>

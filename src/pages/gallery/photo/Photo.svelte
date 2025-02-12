@@ -68,10 +68,4 @@
     grid-template-columns: 600px 1fr;
     gap: 16px;
   }
-  .log {
-    margin: 0 0 16px 0;
-    border: 1px solid var(--color-primary);
-    padding: 8px;
-    font-family: 'Consolas', monospace;
-  }
 </style>
