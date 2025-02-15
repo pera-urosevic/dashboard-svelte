@@ -44,6 +44,10 @@
       &:disabled {
         opacity: 1;
       }
+      &:hover:not(:disabled) {
+        opacity: 1;
+        filter: saturate(0);
+      }
     }
   }
 </style>
