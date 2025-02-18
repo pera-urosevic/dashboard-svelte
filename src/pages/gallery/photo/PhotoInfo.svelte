@@ -3,8 +3,9 @@
 
   type Props = {
     record: PhotoRecord
+    onPixelfed: () => void
   }
-  const { record }: Props = $props()
+  const { record, onPixelfed }: Props = $props()
 
   const onCopy = (e: Event) => {
     e.preventDefault()
@@ -29,7 +30,9 @@
   }
 </script>
 
-<div class="section">Pixelfed</div>
+<div class="section">
+  <button onclick={onPixelfed} title={record?.pixelfed}>Pixelfed {record?.pixelfed ? '🟢' : '🔴'}</button>
+</div>
 <div class="info">
   <div class="label">Path</div>
   <a href="#copy" class="copy" onclick={onCopy}>{record.path}</a>

@@ -43,14 +43,13 @@
 
 <Header>
   <a href="/gallery.html">Gallery</a>
-  <button onclick={onPixelfed} title={record?.pixelfed}>Pixelfed {record?.pixelfed ? '🟢' : '🔴'}</button>
 </Header>
 <Main>
   {#if record}
     <div class="editor">
       <div>
         <PhotoMeta {record} {onUpdate} />
-        <PhotoInfo {record} />
+        <PhotoInfo {record} {onPixelfed} />
       </div>
       <PhotoPreview
         url={`${import.meta.env.VITE_GALLERY_CDN}/images/${record.album} - ${record.datetime}.${record.type}`}
